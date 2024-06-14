@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  #  itms-allure:
+  #    image: itms-allure:latest
+  #    container_name: itms-allure
+  #    restart: always
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #      #     args:
+  #      #         AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+  #      #         AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+  #      #         AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  #      #         NEXT_PUBLIC_ENV_BULGARIA_ID: ${NEXT_PUBLIC_ENV_BULGARIA_ID}
+  #      # environment:
+  #      #     NODE_ENV: ${NODE_ENV}
+  #      #     API_HOST: ${API_HOST}
+  #      #     API_AUTH_HOST: ${API_AUTH_HOST}
+  #      #     API_AUTH_CLIENT_ID: ${API_AUTH_CLIENT_ID}
+  #      #     API_AUTH_CLIENT_SECRET: ${API_AUTH_CLIENT_SECRET}
+  #      #     API_AUTH_USERNAME: ${API_AUTH_USERNAME}
+  #      #     API_AUTH_PASSWORD: ${API_AUTH_PASSWORD}
+  #      #     API_AUTH_GRANT_TYPE: ${API_AUTH_GRANT_TYPE}
+  #      #     NEXT_PUBLIC_ENV_BULGARIA_ID: ${NEXT_PUBLIC_ENV_BULGARIA_ID}
+  #      # ports:
+  #      #     - "${APP_PORT}:3000"
+  #      # - 8282:3000
+  #    volumes:
+  #      - $PWD:$PWD:w
+  #      - /var/run/docker.sock:/var/run/docker.sock
+
+  selenoid:
+#    restart: always
+    network_mode: bridge
+    image: aerokube/selenoid:latest-release
+    container_name: "selenoid"
+    volumes:
+      - "./browsers.json:/etc/selenoid/browsers.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD.:/etc/selenoid"
+    command: [ "-conf", "/etc/selenoid/browsers.json", "-log-output-dir", "/opt/selenoid/logs" ]
+    ports:
+      - "4444:4444"
+  selenoid-ui:
+#    restart: always
+    image: "aerokube/selenoid-ui:latest-release"
+    container_name: "selenoid-ui"
+    network_mode: bridge
+    links:
+      - selenoid
+    ports:
+      - "8081:8080"
+    command: [ "--selenoid-uri","http://selenoid:4444" ]

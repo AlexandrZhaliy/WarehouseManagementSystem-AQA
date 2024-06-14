@@ -1,0 +1,7 @@
+<suite name="SmokeTestRun">
+    <test name="SmokeTestRun" preserve-order="true" thread-count="1" parallel="methods" >
+        <classes>
+            <class name="ui.SmokeTests"/>
+        </classes>
+    </test>
+</suite>
