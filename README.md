@@ -1,4 +1,4 @@
-# warehouse_management-automation
+# WarehouseManagementSystem-AQA
 
 This is the project on which I took a part in project structure creation procedure and created scripts for test automation and kept the project files up to date.
 The following tests were fully created by me:
